@@ -163,10 +163,18 @@ import 'package:provider/provider.dart';
 
 import '../models/user.dart';
 import '../services/auth.dart';
+import '../services/resources.dart';
 
 Future <void> main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  //initialize event list
+  Resources.initializeCommunityEvents();
+  Resources.initializeDiscussionPosts();
+  Resources.initializeVehiclePlates();
+  Resources.initializeEmergencyContacts();
+  Resources.initializeRegisteredVehicles();
+
   runApp(MyApp());
 }
 

@@ -16,3 +16,6 @@ const textInputDecoration =  InputDecoration(
         )
     )
 );
+
+const isProduction = true;
+const String google_api_key = "AIzaSyC46WXNX4g10z8QcwKsLZ1zHsSInMzMWL8";
