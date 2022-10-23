@@ -3,9 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_cure/services/database.dart';
 import 'package:home_cure/services/storage.dart';
+import 'package:readmore/readmore.dart';
 
 import '../../models/incidence_report.dart';
 import 'package:intl/intl.dart';
+
+import '../../services/resources.dart';
 
 class IncidentReport extends StatefulWidget {
   const IncidentReport({Key? key}) : super(key: key);
@@ -33,12 +36,7 @@ class _IncidentReportState extends State<IncidentReport> {
         centerTitle: true,
         backgroundColor: Colors.lightBlueAccent[100],
       ),
-      body: FutureBuilder(
-        future: _dbService.getIncidenceReport(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<IncidenceReport>> snapshot) {
-          if (snapshot.hasData) {
-            return Container(
+      body: Container(
                 margin: EdgeInsets.all(30.0),
                 child: SingleChildScrollView(
                   physics: ScrollPhysics(),
@@ -46,31 +44,31 @@ class _IncidentReportState extends State<IncidentReport> {
                     children: [
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
+                          itemCount: Resources.incidenceReportList.length,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             String _dayOfYear = DateFormat('yyyy-MM-dd')
-                                .format(snapshot.data![index].timeOfOccurance);
+                                .format(Resources.incidenceReportList[index].timeOfOccurance);
                             String _timeOfDay = DateFormat('HH:mm:ss')
-                                .format(snapshot.data![index].timeOfOccurance);
-                            int severity = snapshot.data![index].severity;
+                                .format(Resources.incidenceReportList[index].timeOfOccurance);
+                            int severity = Resources.incidenceReportList[index].severity;
                             var boxColor;
-                            switch (severity){
+                            switch (severity) {
                               case 0:
-                                boxColor = Color(0xFFC2FCB2);
+                                boxColor = Colors.green[400];
                                 break;
                               case 1:
-                                boxColor = Color(0xE7FFA06D);
+                                boxColor = Colors.orange[400];
                                 break;
                               case 2:
-                                boxColor = Color(0xFFCE697D);
+                                boxColor = Colors.red[400];
                                 break;
                             }
 
                             return Column(children: [
                               Container(
                                 padding: EdgeInsets.all(20.0),
-                                height: 350,
+
                                 width: 370,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -83,17 +81,18 @@ class _IncidentReportState extends State<IncidentReport> {
                                     //Report Title and Time
                                     Row(
                                       children: [
-                                        Text(
-                                            snapshot
-                                                .data![index].incidenceTitle,
-                                            //can replace with $reportTitle
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                color: Color(0xFFFFFFFF),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 24)),
-                                        SizedBox(width: 100),
+                                        Flexible(
+                                          child: Text(
+                                              Resources.incidenceReportList[index].incidenceTitle,
+                                              //can replace with $reportTitle
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  color: Color(0xFFFFFFFF),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 24)),
+                                        ),
+                                        SizedBox(width: 50),
                                         Text('${_dayOfYear}\n ${_timeOfDay}',
                                             //can replace with $time and $date
                                             textAlign: TextAlign.right,
@@ -107,7 +106,7 @@ class _IncidentReportState extends State<IncidentReport> {
                                     //Reported By
                                     SizedBox(height: 5),
                                     Text(
-                                        'Reported By:\n${snapshot.data![index].reporterName}\n${snapshot.data![index].incidenceLocation}',
+                                        'Reported By:\n${Resources.incidenceReportList[index].reporterName}\n${Resources.incidenceReportList[index].incidenceLocation}',
                                         //can replace with $reportedBy
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
@@ -117,38 +116,29 @@ class _IncidentReportState extends State<IncidentReport> {
                                             fontSize: 14)),
                                     SizedBox(height: 5),
                                     //can replace with $textDescription
-                                    Text(
-                                      snapshot.data![index].incidenceDesc,
+                                    ReadMoreText(
+                                      Resources.incidenceReportList[index].incidenceDesc,
+                                      trimLines: 2,
                                       textAlign: TextAlign.left,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: 'Show more',
                                       style: TextStyle(
                                           fontFamily: 'Inter',
                                           color: Color(0xFFFFFFFF),
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14),
+                                      trimExpandedText: 'Show less',
+                                      moreStyle: TextStyle(
+                                          fontFamily: 'Inter',
+                                          color: Color(0xFFFFFFFF),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
                                     ),
-                                    SizedBox(height: 10),
-                                    FutureBuilder(
-                                        future: _storageService.downloadUrl(
-                                            snapshot.data![index].imageUrl!),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<String> snapshot) {
-                                          if (snapshot.hasData) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image.network(
-                                                snapshot.data!,
-                                                height: 130,
-                                                width: 300,
-                                                fit: BoxFit.fill,
-                                              ),
-                                            );
-                                          } else {
-                                            return Container(
-                                                child: Text(
-                                                    "Image cannot be loaded"));
-                                          }
-                                        }),
+                                    SizedBox(height: 20),
+                                    Image.asset(
+                                        Resources.incidenceReportList[index].imageUrl!,
+                                      height:130,width:300
+                                    ),
 
                                     //Description
                                     //Image
@@ -160,15 +150,8 @@ class _IncidentReportState extends State<IncidentReport> {
                           }),
                     ],
                   ),
-                ));
-            return Container(child: Text(snapshot.data![0].incidenceTitle));
-          } else {
-            return Container(
-              child: Text("Hvanet loaded"),
-            );
-          }
-        },
-      ),
+                )),
     );
+
   }
 }

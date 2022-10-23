@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:home_cure/models/community_event.dart';
+import 'package:readmore/readmore.dart';
 
 import '../../services/resources.dart';
 import 'package:intl/intl.dart';
@@ -32,7 +33,7 @@ class _eventState extends State<event> {
     const int descCharMax = 80;
     return Scaffold(
         body: Container(
-      margin: EdgeInsets.all(30.0),
+      margin: EdgeInsets.only(top: 30),
       child: SingleChildScrollView(
         physics: ScrollPhysics(),
         child: Column(
@@ -49,6 +50,7 @@ class _eventState extends State<event> {
                   String _timeOfDay = DateFormat('HH:mm:ss')
                       .format(communityEventList[index].timeOfRelease);
                   return Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     padding: EdgeInsets.all(20.0),
                     width: 370,
 
@@ -85,24 +87,27 @@ class _eventState extends State<event> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    getShortenedText(
+                                Container(
+                                    width: 180,
+                                    margin: EdgeInsets.only(top: 10),
+                                    child: Text(
                                         communityEventList[index].userName,
-                                        userCharMax), //can replace with $reportTitle
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        color: Color(0xFF015C92),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16)),
-                                Text(
-                                    '${communityEventList[index].address}', //can replace with $reportTitle
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        color: Color(0xFF2D82B5),
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14))
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color: Color(0xFF015C92),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16))),
+                                Container(
+                                    width: 180,
+                                    child: Text(
+                                        '${communityEventList[index].address}', //can replace with $reportTitle
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color: Color(0xFF2D82B5),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14))),
                               ],
                             ),
                             Expanded(
@@ -120,9 +125,8 @@ class _eventState extends State<event> {
                         //Reported By
                         SizedBox(height: 10),
                         Text(
-                            getShortenedText(
-                                communityEventList[index].eventTitle,
-                                titleCharMax), //can replace with $reportedBy
+                            communityEventList[index]
+                                .eventTitle, //can replace with $reportedBy
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: 'Inter',
@@ -131,19 +135,27 @@ class _eventState extends State<event> {
                                 fontSize: 16)),
                         SizedBox(height: 5),
                         //can replace with $textDescription
-                        Text(
-                          getShortenedText(
-                              communityEventList[index].eventDesc, descCharMax),
+                        ReadMoreText(
+                          communityEventList[index].eventDesc,
+                          trimLines: 2,
                           textAlign: TextAlign.left,
+                          trimMode: TrimMode.Line,
+                          trimCollapsedText: 'Show more',
                           style: TextStyle(
                               fontFamily: 'Inter',
                               color: Color(0xFF2D82B5),
                               fontWeight: FontWeight.w500,
                               fontSize: 14),
+                          trimExpandedText: 'Show less',
+                          moreStyle: TextStyle(
+                              fontFamily: 'Inter',
+                              color: Color(0xFF2D82B5),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
                         ),
                         SizedBox(height: 10),
                         // if got then  display picture
-                        communityEventList[index].imageUrl!.isNotEmpty
+                        communityEventList[index].isFromLocal
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.file(
@@ -151,7 +163,13 @@ class _eventState extends State<event> {
                                     height: 130,
                                     width: 300,
                                     fit: BoxFit.fill))
-                            : Container()
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset(
+                                    communityEventList[index].imageUrl!,
+                                    height: 130,
+                                    width: 300,
+                                    fit: BoxFit.fill))
 
                         //Description
                         //Image

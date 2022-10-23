@@ -18,23 +18,9 @@ class Community extends StatefulWidget {
 
 class _CommunityState extends State<Community>
     with SingleTickerProviderStateMixin {
-  static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Event'),
-    Tab(text: 'Dicussion'),
-  ];
 
-  late TabController _tabController;
-  @override
-  void initState() {
-    super.initState();
-    _tabController = new TabController(vsync: this, length: myTabs.length);
-  }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +118,6 @@ class _CommunityState extends State<Community>
                           child: Container(
                             padding: EdgeInsets.all(20.0),
                             width: 380,
-                            height: 550,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100)),
                             child: Column(
@@ -256,14 +241,6 @@ class _CommunityState extends State<Community>
                                             color: Color(0xFF015C92),
                                             fontWeight: FontWeight.w600,
                                             fontSize: 16))),
-                                image != null
-                                    ? Image.file(
-                                        image!,
-                                        width: 200,
-                                        height: 100,
-                                      )
-                                    : FlutterLogo(),
-                                Text(image != null ? image!.path : "test"),
                                 SizedBox(height: 30),
                                 Center(
                                   child: SizedBox(

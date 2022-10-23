@@ -62,6 +62,7 @@ class DatabaseService {
         'age': appUser.age,
         'gender': appUser.gender,
         'email': appUser.email,
+        'address': appUser.address,
         'phoneNo': appUser.phoneNo,
         'emergencyContacts': appUser.emergencyContacts,
         'registeredVehicles': appUser.registeredVehicles

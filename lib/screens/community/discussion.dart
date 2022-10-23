@@ -36,7 +36,8 @@ class _discussionState extends State<discussion> {
     const int descCharMax = 80;
     return Scaffold(
         body: Container(
-          margin: EdgeInsets.all(30.0),
+          margin: EdgeInsets.only(top: 30),
+
           child: SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Column(
@@ -53,8 +54,8 @@ class _discussionState extends State<discussion> {
                           .format(discussionPostList [index].timeOfRelease);
                       return Container(
                         padding: EdgeInsets.all(20.0),
+                        margin:EdgeInsets.fromLTRB(20, 10, 20, 10),
                         width: 370,
-
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Color(0xFFE0F0FF),
@@ -88,21 +89,28 @@ class _discussionState extends State<discussion> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(getShortenedText(discussionPostList [index].userName, userCharMax), //can replace with $reportTitle
+                                    Container(
+                                      width:180,
+                                      margin: EdgeInsets.only(top:10),
+                                      child:
+                                    Text(discussionPostList [index].userName, //can replace with $reportTitle
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                             fontFamily: 'Inter',
                                             color: Color(0xFF015C92),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16)
-                                    ),Text('${discussionPostList [index].address}', //can replace with $reportTitle
+                                            fontSize: 16))
+                                    ),
+                                    Container(
+                                      width:180,
+                                      child:Text('${discussionPostList [index].address}', //can replace with $reportTitle
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                             fontFamily: 'Inter',
                                             color: Color(0xFF2D82B5),
                                             fontWeight: FontWeight.w700,
                                             fontSize: 14)
-                                    )
+                                    ))
                                   ],
                                 ),
                                 Expanded(
@@ -118,7 +126,10 @@ class _discussionState extends State<discussion> {
                             ),
                             //Reported By
                             SizedBox(height: 10),
-                            Text(getShortenedText(discussionPostList [index].eventTitle, titleCharMax), //can replace with $reportedBy
+                            Container(
+                            width:240,
+                            child:
+                            Text(discussionPostList [index].eventTitle, //can replace with $reportedBy
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'Inter',
@@ -126,7 +137,7 @@ class _discussionState extends State<discussion> {
                                     fontWeight: FontWeight.w700
                                     ,
                                     fontSize: 16)
-                            ),
+                            )),
                             SizedBox(height: 5),
                             //can replace with $textDescription
                       ReadMoreText(

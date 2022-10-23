@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:home_cure/screens/community/community.dart';
 import 'package:home_cure/screens/home/house_patrol.dart';
@@ -5,8 +7,11 @@ import 'package:home_cure/screens/home/incident_report.dart';
 import 'package:home_cure/screens/home/suspicious_report.dart';
 import 'package:home_cure/screens/message/message.dart';
 import 'package:home_cure/screens/profile/profile.dart';
+import 'package:home_cure/services/resources.dart';
+import 'package:readmore/readmore.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
+import '../profile/security_tips.dart';
 import 'entry_registration.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -63,8 +68,12 @@ class _HomeState extends State<Home> {
 class MyHome extends StatelessWidget {
   const MyHome({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+    math.Random random = new Random();
+    int randomTipIndex = random.nextInt(Resources.securityTipsInFile().length);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -536,7 +545,7 @@ class MyHome extends StatelessWidget {
                               ),
                               SizedBox(height: 5),
                               Text(
-                                  'House Status',
+                                  'House Patrol',
                                   //textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontFamily: 'Inter',
@@ -571,7 +580,12 @@ class MyHome extends StatelessWidget {
                     ]
                 ),
                 child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SecurityTips()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFFF1F5F9), // Background color
                     ),
@@ -600,7 +614,7 @@ class MyHome extends StatelessWidget {
                         ),
                         SizedBox(height: 5),
                         Text(
-                            'Make friends with neighbours',
+                            Resources.securityTipsInFile()[randomTipIndex].tipTitle,
                             style: TextStyle(
                                 fontFamily: 'Inter',
                                 color: Color(0xFF2D82B5),
@@ -608,14 +622,25 @@ class MyHome extends StatelessWidget {
                                 fontSize: 14)
                         ),
                         SizedBox(height: 5),
-                        Text(
-                            'Offer yourself as a resource in case of emergencies or help needed on their end; some neighbors might reciprocate the offer.',
-                            style: TextStyle(
-                                fontFamily: 'Inter',
+                        SingleChildScrollView(
+                          child: ReadMoreText(
+                            Resources.securityTipsInFile()[randomTipIndex].tipDesc,
+                            trimLines: 3,
+                            textAlign: TextAlign.left,
+                            trimMode: TrimMode.Line,
+                            trimCollapsedText: 'Show more',
+                            style: TextStyle(fontFamily: 'Inter',
                                 color: Color(0xFF2D82B5),
                                 fontWeight: FontWeight.w600,
-                                fontSize: 11)
+                                fontSize: 11),
+                            trimExpandedText: ' Show less',
+                            moreStyle: TextStyle(fontFamily: 'Inter',
+                                color: Color(0xFF2D82B5),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 11),
+                          ),
                         ),
+
                       ],
                     )),
               ),

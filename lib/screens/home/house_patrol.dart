@@ -10,6 +10,8 @@ import 'package:home_cure/shared/constants.dart';
 
 import '../../services/database.dart';
 import '../../services/resources.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+
 
 class HomePatrol extends StatefulWidget {
   const HomePatrol({Key? key}) : super(key: key);
@@ -23,10 +25,10 @@ class _HomePatrolState extends State<HomePatrol> {
   static const LatLng sourceLocation = LatLng(3.049870, 101.573301);
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(3.047588, 101.573301),
-    zoom: 15,
+    zoom: 16.11,
   );
   DatabaseService _dbService =
-      DatabaseService(FirebaseAuth.instance.currentUser!.uid);
+  DatabaseService(FirebaseAuth.instance.currentUser!.uid);
 
   static final CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
@@ -36,10 +38,10 @@ class _HomePatrolState extends State<HomePatrol> {
 
   Future<Polyline> _getRoutePolyline(
       {required LatLng start,
-      required LatLng finish,
-      required Color color,
-      required String id,
-      int width = 6}) async {
+        required LatLng finish,
+        required Color color,
+        required String id,
+        int width = 6}) async {
     // Generates every polyline between start and finish
     final polylinePoints = PolylinePoints();
     // Holds each polyline coordinate as Lat and Lng pairs
@@ -105,7 +107,7 @@ class _HomePatrolState extends State<HomePatrol> {
       polylineList.add(await _getRoutePolyline(
           start: polylineStart,
           finish: polylineFinish,
-          color: Colors.green,
+          color: Colors.blue,
           id: index.toString()));
     }
 
@@ -127,8 +129,8 @@ class _HomePatrolState extends State<HomePatrol> {
       isChecked = routePointsList[index]['isPassed'];
       markerList.add(Marker(
         icon: isChecked
-            ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
-            : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+            ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)
+            : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         markerId: MarkerId(index.toString()),
         position: markerLatLng,
       ));
@@ -146,7 +148,18 @@ class _HomePatrolState extends State<HomePatrol> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Patrol"),
+        elevation: 0,
+        title: Text(
+            'House Patrol',
+            style: TextStyle(
+                fontFamily: 'Inter',
+                color: Colors.lightBlue[900],
+                fontWeight: FontWeight.bold,
+                fontSize: 22)
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.lightBlueAccent[100],
+
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -194,13 +207,118 @@ class _HomePatrolState extends State<HomePatrol> {
                   if (snapshotFuture.hasData) {
                     //LAYOUT IS HERE
                     return Container(
-                      height: 500,
-                      width:500,
-                      child: GoogleMap(
-                          mapType: MapType.normal,
-                          initialCameraPosition: _kGooglePlex,
-                          polylines: Set.from(snapshotFuture.data![0]),
-                          markers: Set.from(snapshotFuture.data![1]))
+                      margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 80,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Your House: ',
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Color(0xFF015C92),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16)),
+                                SizedBox(height: 10),
+                                Text('4, Jalan USJ 5',
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Color(0xFF015C92),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20))
+                              ],
+                            ),
+                          ),
+                          Container(
+                              height: 300,
+                              width:500,
+                              child: GoogleMap(
+                                  mapType: MapType.normal,
+                                  initialCameraPosition: _kGooglePlex,
+                                  polylines: Set.from(snapshotFuture.data![0]),
+                                  markers: Set.from(snapshotFuture.data![1]))
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Nearest Gate Contact: ',
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Color(0xFF015C92),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16)),
+                                SizedBox(height: 20),
+                                Container(
+                                  padding: EdgeInsets.all(10.0),
+                                  width: 370,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xFFE0F0FF),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color(0xFFC9D9E8),
+                                          spreadRadius: 0,
+                                          blurRadius: 16,
+                                          offset: Offset(8, 8),
+                                        ),
+                                        BoxShadow(
+                                          color: Color(0xFFFFFFFF),
+                                          spreadRadius: 0,
+                                          blurRadius: 16,
+                                          offset: Offset(-8, -8),
+                                        )
+                                      ]),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.door_sliding,
+                                          size: 35,
+                                          color: Color(0xFF015C92)
+                                      ),
+                                      SizedBox(width: 10),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Gate A',
+                                              style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  color: Color(0xFF015C92),
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 16)),
+                                          Text('Security Supervisor Tom',
+                                              style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  color: Color(0xFF015C92),
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16))
+                                        ],
+                                      ),
+                                      SizedBox(width: 40),
+                                      IconButton(
+                                          onPressed: () async {
+                                            FlutterPhoneDirectCaller.callNumber("011234445");
+                                          },
+                                          icon: Icon(Icons.call,
+                                            size: 30,
+                                            color: Color(0xFF015C92),))
+                                    ],
+
+                                  ),
+
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   } else {
                     return Container();
@@ -208,11 +326,6 @@ class _HomePatrolState extends State<HomePatrol> {
                 });
             ;
           }),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: Text('To the lake!'),
-        icon: Icon(Icons.directions_boat),
-      ),
     );
   }
 

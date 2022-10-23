@@ -9,6 +9,7 @@ class AppUser{
   String? gender;
   String? email;
   String? phoneNo;
+  String? address;
   List<Map>? emergencyContacts;
   List<Map>? registeredVehicles;
   //registeredVehicles
@@ -22,6 +23,7 @@ class AppUser{
       if (email != null) "email": email,
       if (phoneNo != null) "phoneNo": phoneNo,
       if (gender != null) "gender": gender,
+      if (address != null) "address": address,
       if (emergencyContacts != null) "emergencyContacts" : emergencyContacts,
       if (registeredVehicles != null) "registeredVehicles": registeredVehicles,
     };
@@ -37,6 +39,7 @@ class AppUser{
     appUser.age= data?['age'];
     appUser.email= data?['email'];
     appUser.phoneNo= data?['phoneNo'];
+    appUser.address = data?['address'];
     appUser.gender= data?['gender'];
     appUser.emergencyContacts= data?['emergencyContacts'] is Iterable ? List.from(data?['emergencyContacts']) : null;
     appUser.registeredVehicles= data?['registeredVehicles'] is Iterable ? List.from(data?['registeredVehicles']) : null;
