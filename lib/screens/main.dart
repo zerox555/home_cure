@@ -17,8 +17,8 @@ Future <void> main()async{
   Resources.initializeCommunityEvents();
   Resources.initializeDiscussionPosts();
   // Resources.initializeVehiclePlates();
-  Resources.initializeEmergencyContacts();
-  Resources.initializeRegisteredVehicles();
+  // Resources.initializeEmergencyContacts();
+  // Resources.initializeRegisteredVehicles();
   Resources.initializeReportStatus();
   Resources.initializeIncidenceReportList();
 
