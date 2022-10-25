@@ -263,7 +263,6 @@ class _SignUpFormState extends State<SignUpForm> {
     formWidget.add(
       TextFormField(
         key: _passKey,
-        obscureText: true,
         decoration: const InputDecoration(
             hintText: 'Age',
             labelText: 'Enter Age',
