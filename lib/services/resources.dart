@@ -21,6 +21,8 @@ class Resources {
   static List<Vehicle> registeredVehiclelist = [];
   static List<ReportStatus> reportStatusList = [];
   static List<IncidenceReport> incidenceReportList = [];
+  static bool executed = false;
+
 
   //hardcoded return method for security tips page
   static List<SecurityTip> securityTipsInFile() {

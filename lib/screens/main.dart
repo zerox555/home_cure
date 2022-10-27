@@ -14,13 +14,7 @@ Future <void> main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   //initialize event list
-  Resources.initializeCommunityEvents();
-  Resources.initializeDiscussionPosts();
-  // Resources.initializeVehiclePlates();
-  // Resources.initializeEmergencyContacts();
-  // Resources.initializeRegisteredVehicles();
-  Resources.initializeReportStatus();
-  Resources.initializeIncidenceReportList();
+
 
   runApp(MyApp());
 }
