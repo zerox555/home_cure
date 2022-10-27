@@ -61,14 +61,14 @@ class Resources {
     incidenceReport.imageUrl = "Image/robbery.jpg";
     incidenceReportList.add(incidenceReport);
     incidenceReport = IncidenceReport(
-        "Suspicious Vehicle",
+        "Drive by robbery",
         DateTime(2022, 10, 2, 12, 40),
         "Zoe Tey Yixuan",
         FirebaseAuth.instance.currentUser!.uid,
         "A roughly 6 feet Chinese looking guy driving a motor robbed my bag. The motor driver was armed with a knife and injured my hand.",
         "3, jalan usj 4/2f",
         2);
-    incidenceReport.imageUrl = "Image/car.jpg";
+    incidenceReport.imageUrl = "Image/hand.jpg";
     incidenceReportList.add(incidenceReport);
     incidenceReport = IncidenceReport(
         "Stray dogs",
